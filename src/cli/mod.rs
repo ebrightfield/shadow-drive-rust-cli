@@ -5,6 +5,7 @@ use clap::Parser;
 use jungle_fi_cli_utils::input_parsing::parse_pubkey;
 use shadow_drive_cli::parse_filesize;
 use solana_sdk::pubkey::Pubkey;
+use shadow_drive_cli::FILE_UPLOAD_BATCH_SIZE;
 
 /// Manually specify a cluster url and/or keypair.
 /// Those values otherwise default to the Solana CLI config file.
@@ -168,7 +169,7 @@ pub enum Command {
     StoreFiles {
         /// Batch size for file uploads, default 100, only relevant for large
         /// numbers of uploads
-        #[clap(long, default_value=FILE_UPLOAD_BATCH_SIZE)]
+        #[clap(long, default_value_t=FILE_UPLOAD_BATCH_SIZE)]
         batch_size: usize,
         /// The storage account on which to upload the files
         #[clap(parse(try_from_str = parse_pubkey))]

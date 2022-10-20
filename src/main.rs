@@ -6,7 +6,6 @@ use cli::Opts;
 use jungle_fi_cli_utils::input_parsing::config::get_solana_cli_config;
 use shadow_drive_cli::{WrappedSigner, GENESYSGO_RPC};
 use solana_clap_v3_utils::keypair::signer_from_path;
-use std::io::stdin;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

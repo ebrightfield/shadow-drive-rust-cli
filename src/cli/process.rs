@@ -1,7 +1,7 @@
 use super::Command;
 use itertools::Itertools;
 use shadow_drive_cli::process_shadow_api_response;
-use shadow_drive_cli::{wait_for_user_confirmation, FILE_UPLOAD_BATCH_SIZE};
+use shadow_drive_cli::wait_for_user_confirmation;
 use shadow_drive_rust::models::ShadowFile;
 use shadow_drive_rust::{ShadowDriveClient, StorageAccountVersion};
 use solana_sdk::signature::Signer;
@@ -187,12 +187,11 @@ impl Command {
                 The files in their current state become public as soon as they're uploaded."
                 );
                 wait_for_user_confirmation(skip_confirm)?;
-                for chunk in files.into_iter().chunks(FILE_UPLOAD_BATCH_SIZE) {
+                for chunk in &files.into_iter().chunks(*batch_size) {
                     let response = client
                         .store_files(
                             &storage_account,
                             chunk
-                                .iter()
                                 .map(|s| {
                                     let basename = shadow_drive_cli::acquire_basename(s);
                                     ShadowFile::file(basename, s.clone())
