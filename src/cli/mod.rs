@@ -166,6 +166,10 @@ pub enum Command {
     },
     /// Upload one or more files to a storage account.
     StoreFiles {
+        /// Batch size for file uploads, default 100, only relevant for large
+        /// numbers of uploads
+        #[clap(long, default_value=FILE_UPLOAD_BATCH_SIZE)]
+        batch_size: usize,
         /// The storage account on which to upload the files
         #[clap(parse(try_from_str = parse_pubkey))]
         storage_account: Pubkey,

@@ -6,6 +6,7 @@ use shadow_drive_rust::error::Error;
 use shadow_drive_rust::models::ShadowDriveResult;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::signature::{Signature, Signer, SignerError};
+use std::io::stdin;
 use std::path::PathBuf;
 use std::str::FromStr;
 
@@ -116,4 +117,18 @@ pub fn parse_filesize(size: &str) -> anyhow::Result<Byte> {
             e.to_string()
         )
     })
+}
+
+pub const FILE_UPLOAD_BATCH_SIZE: usize = 100;
+
+/// Confirm from the user that they definitely want some irreversible
+/// operation to occur.
+pub fn wait_for_user_confirmation(skip: bool) -> anyhow::Result<()> {
+    if skip {
+        return Ok(());
+    }
+    println!("Press ENTER to continue, or CTRL+C to abort");
+    let mut proceed = String::new();
+    stdin().read_line(&mut proceed)?;
+    Ok(())
 }

@@ -32,15 +32,3 @@ async fn main() -> anyhow::Result<()> {
         .await?;
     Ok(())
 }
-
-/// Confirm from the user that they definitely want some irreversible
-/// operation to occur.
-fn wait_for_user_confirmation(skip: bool) -> anyhow::Result<()> {
-    if skip {
-        return Ok(());
-    }
-    println!("Press ENTER to continue, or CTRL+C to abort");
-    let mut proceed = String::new();
-    stdin().read_line(&mut proceed)?;
-    Ok(())
-}
