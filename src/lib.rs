@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use byte_unit::Byte;
 use reqwest::header::HeaderMap;
 use reqwest::Response;
-use shadow_drive_rust::error::Error;
+use shadow_drive_rust::error::{Error, FileError};
 use shadow_drive_rust::models::ShadowDriveResult;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::signature::{Signature, Signer, SignerError};
@@ -48,10 +48,28 @@ pub fn process_shadow_api_response<T>(response: ShadowDriveResult<T>) -> anyhow:
     match response {
         Ok(response) => Ok(response),
         Err(err) => match err {
-            Error::ShadowDriveServerError { message, .. } => {
-                println!("{:#?}", &message.to_string());
-                Err(anyhow!("{:#?}", &message.to_string()))
+            Error::ShadowDriveServerError { status, message,  } => {
+                let err = format!("Shadow Drive Server Error {}: {:#?}", status, message.to_string());
+                println!("{}", err);
+                Err(anyhow!("{}", err))
             }
+            Error::FileSystemError(err) => {
+                let err = format!("Filesystem Error: {:#?}", err.to_string());
+                println!("{}", err);
+                Err(anyhow!("{}", err))
+            },
+            Error::FileValidationError(errs) => {
+                let mut err_vec = vec![];
+                for err in errs {
+                    let FileError {
+                        file, error
+                    } = err;
+                    let err = format!("File Validation Error for {}: {}", file, error);
+                    err_vec.push(err);
+                }
+                println!("{:#?}", err_vec);
+                Err(anyhow!("{:#?}", err_vec))
+            },
             e => {
                 println!("{:#?}", e);
                 Err(anyhow!("{:#?}", e))
