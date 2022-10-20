@@ -4281,6 +4281,7 @@ dependencies = [
  "anyhow",
  "byte-unit",
  "clap 3.2.22",
+ "itertools",
  "jungle-fi-cli-utils",
  "reqwest",
  "shadow-drive-rust",

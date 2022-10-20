@@ -1,4 +1,5 @@
 use super::Command;
+use itertools::Itertools;
 use crate::wait_for_user_confirmation;
 use shadow_drive_cli::process_shadow_api_response;
 use shadow_drive_rust::models::ShadowFile;
@@ -185,21 +186,22 @@ impl Command {
                 The files in their current state become public as soon as they're uploaded."
                 );
                 wait_for_user_confirmation(skip_confirm)?;
-                let response = client
-                    .store_files(
-                        &storage_account,
-                        files
-                            .iter()
-                            .map(|s| {
-                                let basename = shadow_drive_cli::acquire_basename(s);
-                                ShadowFile::file(basename, s.clone())
-                            })
-                            .collect(),
-                    )
-                    .await;
-
-                let resp = process_shadow_api_response(response)?;
-                println!("{:#?}", resp);
+                for chunk in files.into_iter().chunks(100) {
+                    let response = client
+                        .store_files(
+                            &storage_account,
+                            chunk
+                                .iter()
+                                .map(|s| {
+                                    let basename = shadow_drive_cli::acquire_basename(s);
+                                    ShadowFile::file(basename, s.clone())
+                                })
+                                .collect(),
+                        )
+                        .await;
+                    let resp = process_shadow_api_response(response)?;
+                    println!("{:#?}", resp);
+                }
             }
         }
         Ok(())

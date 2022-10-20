@@ -13,6 +13,7 @@ byte-unit = "4.0.14"
 solana-sdk = "1.10.34"
 solana-remote-wallet = "1.10.34"
 reqwest = "0.11.12"
+itertools = "0.10.5"
 uriparse = "0.6.4"
 clap = { version = "3.1.18", features = [ "derive" ] }
 solana-clap-v3-utils = { git = "https://github.com/Jungle-Finance/jungle-fi-cli-utils.git" }
