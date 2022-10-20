@@ -1,3 +1,5 @@
+use std::thread::sleep;
+use std::time::Duration;
 use super::Command;
 use itertools::Itertools;
 use shadow_drive_cli::process_shadow_api_response;
@@ -201,6 +203,7 @@ impl Command {
                         .await;
                     let resp = process_shadow_api_response(response)?;
                     println!("{:#?}", resp);
+                    sleep(Duration::from_millis(150));
                 }
             }
         }

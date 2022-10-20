@@ -16,6 +16,9 @@ pub const GENESYSGO_RPC: &str = "https://ssc-dao.genesysgo.net";
 /// Shadow Drive Files are hosted at this domain.
 pub const GENESYSGO_DRIVE: &str = "https://shdw-drive.genesysgo.net";
 
+/// Maximum amount of files to batch into a single [store_files] request.
+pub const FILE_UPLOAD_BATCH_SIZE: usize = 5;
+
 /// To get around using a [Box<dyn Signer>] with [ShadowDriveClient].
 pub struct WrappedSigner(Box<dyn Signer>);
 
@@ -136,8 +139,6 @@ pub fn parse_filesize(size: &str) -> anyhow::Result<Byte> {
         )
     })
 }
-
-pub const FILE_UPLOAD_BATCH_SIZE: usize = 100;
 
 /// Confirm from the user that they definitely want some irreversible
 /// operation to occur.
