@@ -32,6 +32,8 @@ pub struct ConfigOverride {
     /// alter the state of the storage network.
     #[clap(long)]
     pub skip_confirm: bool,
+    #[clap(long)]
+    pub auth: Option<String>,
 }
 
 /// Perform Shadow Drive operations on the command-line.
@@ -48,6 +50,7 @@ pub struct Opts {
 
 #[derive(Debug, Parser)]
 pub enum Command {
+    ShadowRpcAuth,
     /// Create an account on which to store data.
     /// Storage accounts can be globally, irreversibly marked immutable
     /// for a one-time fee.

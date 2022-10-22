@@ -1,3 +1,5 @@
+pub mod genesysgo_auth;
+
 use anyhow::anyhow;
 use byte_unit::Byte;
 use reqwest::header::HeaderMap;
@@ -10,6 +12,7 @@ use std::io::stdin;
 use std::path::PathBuf;
 use std::str::FromStr;
 
+// DEPRECATED
 /// ShadowDriveClient RPC calls go to this domain.
 pub const GENESYSGO_RPC: &str = "https://ssc-dao.genesysgo.net";
 

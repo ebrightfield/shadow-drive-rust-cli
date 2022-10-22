@@ -4284,8 +4284,11 @@ dependencies = [
  "itertools",
  "jungle-fi-cli-utils",
  "reqwest",
+ "serde",
+ "serde_json",
  "shadow-drive-rust",
  "solana-clap-v3-utils",
+ "solana-client",
  "solana-remote-wallet",
  "solana-sdk",
  "tokio",
@@ -4295,8 +4298,6 @@ dependencies = [
 [[package]]
 name = "shadow-drive-rust"
 version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8be90d45862b4e83a913b5b5d64831ab6762d659a2c40a367b8a33b57d6a921"
 dependencies = [
  "anchor-lang",
  "async-trait",
@@ -4308,6 +4309,7 @@ dependencies = [
  "hex",
  "itertools",
  "lazy_static",
+ "log",
  "reqwest",
  "serde",
  "serde_json",
@@ -4318,6 +4320,7 @@ dependencies = [
  "solana-client",
  "solana-sdk",
  "solana-transaction-status",
+ "solana-version",
  "spl-associated-token-account",
  "spl-token",
  "tokio",
