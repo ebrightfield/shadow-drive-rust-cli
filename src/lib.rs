@@ -1,4 +1,5 @@
 pub mod genesysgo_auth;
+pub mod http_sender;
 
 use anyhow::anyhow;
 use byte_unit::Byte;

@@ -9,10 +9,9 @@ use shadow_drive_cli::wait_for_user_confirmation;
 use shadow_drive_rust::models::ShadowFile;
 use shadow_drive_rust::{ShadowDriveClient, StorageAccountVersion};
 use solana_sdk::signature::Signer;
-use shadow_drive_rust::http_sender::HttpSenderWithHeaders;
 use solana_client::nonblocking;
-use solana_client::rpc_client::RpcClientConfig;
 use shadow_drive_cli::genesysgo_auth::GenesysGoAuth;
+use shadow_drive_cli::http_sender::HttpSenderWithHeaders;
 
 pub fn shadow_client_factory<T: Signer>(
     signer: T,
