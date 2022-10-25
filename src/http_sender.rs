@@ -1,4 +1,6 @@
-//! Nonblocking [`RpcSender`] over HTTP.
+/// Copied from `solana-rpc-client` crate, modified [HttpSender]
+/// to allow for passing in default headers. This is useful for
+/// passing auth headers to RPC services like GenesysGo.
 
 use reqwest::header::HeaderMap;
 use serde_json::{json, Value};
