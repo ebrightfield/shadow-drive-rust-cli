@@ -24,14 +24,14 @@ pub fn shadow_client_factory<T: Signer>(
             HeaderName::from_str("Authorization").unwrap(),
             HeaderValue::from_str(&format!("Bearer {}", auth)).unwrap(),
         );
-        let rpc = nonblocking::rpc_client::RpcClient::new_sender(
+        let rpc_client = nonblocking::rpc_client::RpcClient::new_sender(
             HttpSenderWithHeaders::new(
                 url,
                 Some(headers)
             ),
             Default::default(),
         );
-        ShadowDriveClient::new_with_rpc(signer, rpc)
+        ShadowDriveClient::new_with_rpc(signer, rpc_client)
     } else {
         ShadowDriveClient::new(signer, url)
     }
