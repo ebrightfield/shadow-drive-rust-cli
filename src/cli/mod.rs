@@ -36,6 +36,8 @@ pub struct ConfigOverride {
     /// Use keyword "genesysgo" to automatically
     /// authenticate with a GenesysGo Premium RPC endpoint.
     /// GenesysGo Account ID is inferred from `-u/--url` path.
+    /// See also the `shadow-rpc-auth` subcommand for manually
+    /// acquiring an auth token.
     #[clap(long)]
     pub auth: Option<String>,
 }
