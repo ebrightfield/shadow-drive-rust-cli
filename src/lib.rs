@@ -55,8 +55,12 @@ pub fn process_shadow_api_response<T>(response: ShadowDriveResult<T>) -> anyhow:
     match response {
         Ok(response) => Ok(response),
         Err(err) => match err {
-            Error::ShadowDriveServerError { status, message,  } => {
-                let err = format!("Shadow Drive Server Error {}: {:#?}", status, message.to_string());
+            Error::ShadowDriveServerError { status, message } => {
+                let err = format!(
+                    "Shadow Drive Server Error {}: {:#?}",
+                    status,
+                    message.to_string()
+                );
                 println!("{}", err);
                 Err(anyhow!("{}", err))
             }
@@ -64,19 +68,17 @@ pub fn process_shadow_api_response<T>(response: ShadowDriveResult<T>) -> anyhow:
                 let err = format!("Filesystem Error: {:#?}", err.to_string());
                 println!("{}", err);
                 Err(anyhow!("{}", err))
-            },
+            }
             Error::FileValidationError(errs) => {
                 let mut err_vec = vec![];
                 for err in errs {
-                    let FileError {
-                        file, error
-                    } = err;
+                    let FileError { file, error } = err;
                     let err = format!("File Validation Error for {}: {}", file, error);
                     err_vec.push(err);
                 }
                 println!("{:#?}", err_vec);
                 Err(anyhow!("{:#?}", err_vec))
-            },
+            }
             e => {
                 println!("{:#?}", e);
                 Err(anyhow!("{:#?}", e))

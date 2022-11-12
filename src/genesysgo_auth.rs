@@ -1,12 +1,14 @@
 use anyhow::anyhow;
-use solana_sdk::signature::Signer;
 use reqwest::Url;
+use serde::{Deserialize, Serialize};
 use solana_sdk::bs58;
-use serde::{Serialize, Deserialize};
+use solana_sdk::signature::Signer;
 
 const SIGNIN_MSG: &str = "Sign in to GenesysGo Shadow Platform.";
 const SIGNIN_URL: &str = "https://portal.genesysgo.net/api/signin";
 const SIGNIN_URL_STEP2: &str = "https://portal.genesysgo.net/api/premium/token";
+
+pub const GENESYSGO_AUTH_KEYWORD: &str = "genesysgo";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GenesysGoAuthResponse {
@@ -16,7 +18,7 @@ pub struct GenesysGoAuthResponse {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct GenesysGoUser{
+pub struct GenesysGoUser {
     pub id: u64,
     pub public_key: String,
     pub created_at: String,
@@ -35,10 +37,7 @@ pub struct GenesysGoAuth {
 }
 
 impl GenesysGoAuth {
-    pub async fn sign_in(
-        signer: &dyn Signer,
-        account_id: &str,
-    ) -> anyhow::Result<String> {
+    pub async fn sign_in(signer: &dyn Signer, account_id: &str) -> anyhow::Result<String> {
         let signature = signer.sign_message(SIGNIN_MSG.as_bytes());
         let body = Self {
             message: bs58::encode(signature.as_ref()).into_string(),
@@ -69,9 +68,11 @@ impl GenesysGoAuth {
 
 pub fn parse_account_id_from_url(genesysgo_url: String) -> anyhow::Result<String> {
     if !genesysgo_url.contains("genesysgo") {
-        return Err(anyhow!("Not a genesysgo URL, cannot infer Account ID"))
+        return Err(anyhow!("Not a genesysgo URL, cannot infer Account ID"));
     }
     let pieces = genesysgo_url.split("/");
-    let last = pieces.last().ok_or(anyhow!("Could not parse genesysgo url: {}", &genesysgo_url))?;
+    let last = pieces
+        .last()
+        .ok_or(anyhow!("Could not parse genesysgo url: {}", &genesysgo_url))?;
     Ok(last.to_string())
 }

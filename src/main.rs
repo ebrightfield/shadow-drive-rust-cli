@@ -4,9 +4,11 @@ use anyhow::anyhow;
 use clap::{IntoApp, Parser};
 use cli::Opts;
 use jungle_fi_cli_utils::input_parsing::config::get_solana_cli_config;
+use shadow_drive_cli::genesysgo_auth::{
+    parse_account_id_from_url, GenesysGoAuth, GENESYSGO_AUTH_KEYWORD,
+};
 use shadow_drive_cli::WrappedSigner;
 use solana_clap_v3_utils::keypair::signer_from_path;
-use shadow_drive_cli::genesysgo_auth::{GenesysGoAuth, parse_account_id_from_url};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -29,7 +31,7 @@ async fn main() -> anyhow::Result<()> {
     let url = opts.cfg_override.url.unwrap_or(config.json_rpc_url);
 
     let mut auth: Option<String> = opts.cfg_override.auth.clone();
-    if opts.cfg_override.auth == Some("auto".to_string()) {
+    if opts.cfg_override.auth == Some(GENESYSGO_AUTH_KEYWORD.to_string()) {
         let account_id = parse_account_id_from_url(url.to_string())?;
         let thing = GenesysGoAuth::sign_in(&signer, &account_id).await?;
         auth = Some(thing)

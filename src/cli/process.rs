@@ -1,23 +1,23 @@
-use std::str::FromStr;
-use std::thread::sleep;
-use std::time::Duration;
 use super::Command;
 use itertools::Itertools;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
+use shadow_drive_cli::genesysgo_auth::{parse_account_id_from_url, GenesysGoAuth};
+use shadow_drive_cli::http_sender::HttpSenderWithHeaders;
 use shadow_drive_cli::process_shadow_api_response;
 use shadow_drive_cli::wait_for_user_confirmation;
 use shadow_drive_rust::models::ShadowFile;
 use shadow_drive_rust::{ShadowDriveClient, StorageAccountVersion};
-use solana_sdk::signature::Signer;
 use solana_client::nonblocking;
 use solana_client::rpc_client::RpcClient;
-use shadow_drive_cli::genesysgo_auth::{GenesysGoAuth, parse_account_id_from_url};
-use shadow_drive_cli::http_sender::HttpSenderWithHeaders;
+use solana_sdk::signature::Signer;
+use std::str::FromStr;
+use std::thread::sleep;
+use std::time::Duration;
 
 pub fn shadow_client_factory<T: Signer>(
     signer: T,
     url: &str,
-    auth: Option<String>
+    auth: Option<String>,
 ) -> ShadowDriveClient<T> {
     if let Some(auth) = auth {
         let mut headers = HeaderMap::new();
@@ -26,24 +26,18 @@ pub fn shadow_client_factory<T: Signer>(
             HeaderValue::from_str(&format!("Bearer {}", auth)).unwrap(),
         );
         let rpc_client = nonblocking::rpc_client::RpcClient::new_sender(
-            HttpSenderWithHeaders::new(
-                url,
-                Some(headers.clone())
-            ),
+            HttpSenderWithHeaders::new(url, Some(headers.clone())),
             Default::default(),
         );
         let client = RpcClient::new_sender(
-            HttpSenderWithHeaders::new(
-                url,
-                Some(headers)
-            ),
+            HttpSenderWithHeaders::new(url, Some(headers)),
             Default::default(),
         );
         let balance = client.get_balance(&signer.pubkey());
         match balance {
             Ok(balance) => {
                 println!("{}: {} lamports", signer.pubkey().to_string(), balance);
-            },
+            }
             Err(e) => {
                 println!("Failed to fetch balance: {:?}", e);
             }
@@ -70,7 +64,7 @@ impl Command {
                 let account_id = parse_account_id_from_url(url.to_string())?;
                 let resp = GenesysGoAuth::sign_in(&signer, &account_id).await?;
                 println!("{:#?}", resp);
-            },
+            }
             Command::CreateStorageAccount { name, size } => {
                 let client = shadow_client_factory(signer, url, auth);
                 println!("Create Storage Account {}: {}", name, size);

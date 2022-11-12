@@ -4,8 +4,8 @@ use byte_unit::Byte;
 use clap::Parser;
 use jungle_fi_cli_utils::input_parsing::parse_pubkey;
 use shadow_drive_cli::parse_filesize;
-use solana_sdk::pubkey::Pubkey;
 use shadow_drive_cli::FILE_UPLOAD_BATCH_SIZE;
+use solana_sdk::pubkey::Pubkey;
 
 /// Manually specify a cluster url and/or keypair.
 /// Those values otherwise default to the Solana CLI config file.
@@ -32,6 +32,10 @@ pub struct ConfigOverride {
     /// alter the state of the storage network.
     #[clap(long)]
     pub skip_confirm: bool,
+    /// Supply a JWT to be included as a Bearer auth token to each RPC request.
+    /// Use keyword "genesysgo" to automatically
+    /// authenticate with a GenesysGo Premium RPC endpoint.
+    /// GenesysGo Account ID is inferred from `-u/--url` path.
     #[clap(long)]
     pub auth: Option<String>,
 }

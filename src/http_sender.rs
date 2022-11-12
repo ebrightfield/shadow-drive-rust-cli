@@ -1,14 +1,13 @@
 /// Copied from `solana-rpc-client` crate, modified [HttpSender]
 /// to allow for passing in default headers. This is useful for
 /// passing auth headers to RPC services like GenesysGo.
-
 use reqwest::header::HeaderMap;
-use serde_json::{json, Value};
 use serde::Deserialize;
+use serde_json::{json, Value};
+use solana_client::rpc_custom_error as custom_error;
 use solana_client::rpc_request::{RpcError, RpcRequest, RpcResponseErrorData};
 use solana_client::rpc_response::RpcSimulateTransactionResult;
 use solana_client::rpc_sender::{RpcSender, RpcTransportStats};
-use solana_client::rpc_custom_error as custom_error;
 use {
     async_trait::async_trait,
     log::*,
@@ -40,7 +39,6 @@ pub struct HttpSenderWithHeaders {
     stats: RwLock<RpcTransportStats>,
 }
 
-
 /// Nonblocking [`RpcSender`] over HTTP.
 impl HttpSenderWithHeaders {
     /// Create an HTTP RPC sender.
@@ -54,7 +52,11 @@ impl HttpSenderWithHeaders {
     /// Create an HTTP RPC sender.
     ///
     /// The URL is an HTTP URL, usually for port 8899.
-    pub fn new_with_timeout<U: ToString>(url: U, timeout: Duration, headers: Option<HeaderMap>) -> Self {
+    pub fn new_with_timeout<U: ToString>(
+        url: U,
+        timeout: Duration,
+        headers: Option<HeaderMap>,
+    ) -> Self {
         let mut default_headers = header::HeaderMap::new();
         default_headers.append(
             header::HeaderName::from_static("solana-client"),
@@ -117,11 +119,11 @@ impl<'a> Drop for StatsUpdater<'a> {
 pub fn build_request_json(req: &RpcRequest, id: u64, params: Value) -> Value {
     let jsonrpc = "2.0";
     json!({
-           "jsonrpc": jsonrpc,
-           "id": id,
-           "method": format!("{}", req),
-           "params": params,
-        })
+       "jsonrpc": jsonrpc,
+       "id": id,
+       "method": format!("{}", req),
+       "params": params,
+    })
 }
 
 #[async_trait]
