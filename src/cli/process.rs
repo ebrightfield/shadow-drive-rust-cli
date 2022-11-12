@@ -10,7 +10,8 @@ use shadow_drive_rust::models::ShadowFile;
 use shadow_drive_rust::{ShadowDriveClient, StorageAccountVersion};
 use solana_sdk::signature::Signer;
 use solana_client::nonblocking;
-use shadow_drive_cli::genesysgo_auth::GenesysGoAuth;
+use solana_client::rpc_client::RpcClient;
+use shadow_drive_cli::genesysgo_auth::{GenesysGoAuth, parse_account_id_from_url};
 use shadow_drive_cli::http_sender::HttpSenderWithHeaders;
 
 pub fn shadow_client_factory<T: Signer>(
@@ -27,10 +28,26 @@ pub fn shadow_client_factory<T: Signer>(
         let rpc_client = nonblocking::rpc_client::RpcClient::new_sender(
             HttpSenderWithHeaders::new(
                 url,
+                Some(headers.clone())
+            ),
+            Default::default(),
+        );
+        let client = RpcClient::new_sender(
+            HttpSenderWithHeaders::new(
+                url,
                 Some(headers)
             ),
             Default::default(),
         );
+        let balance = client.get_balance(&signer.pubkey());
+        match balance {
+            Ok(balance) => {
+                println!("{}: {} lamports", signer.pubkey().to_string(), balance);
+            },
+            Err(e) => {
+                println!("Failed to fetch balance: {:?}", e);
+            }
+        }
         ShadowDriveClient::new_with_rpc(signer, rpc_client)
     } else {
         ShadowDriveClient::new(signer, url)
@@ -50,9 +67,9 @@ impl Command {
         println!("Sending RPC requests to {}", url);
         match self {
             Command::ShadowRpcAuth => {
-                let resp = GenesysGoAuth::sign_in(&signer).await?;
+                let account_id = parse_account_id_from_url(url.to_string())?;
+                let resp = GenesysGoAuth::sign_in(&signer, &account_id).await?;
                 println!("{:#?}", resp);
-                println!("{}", resp.token);
             },
             Command::CreateStorageAccount { name, size } => {
                 let client = shadow_client_factory(signer, url, auth);
