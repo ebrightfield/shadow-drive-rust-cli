@@ -9,7 +9,9 @@ general message signing, and you therefore cannot perform most Shadow Network op
 using a hardware wallet yet.
 
 This is an opinionated CLI, choosing V2 storage accounts where applicable.
-The CLI always operates against mainnet, targeting the GeneSysGo backend. This will change in the near future.
+
+The CLI also works with authenticated GenesysGo Premium RPC Endpoints. See
+the `--auth` flag for more details.
 
 ## Build
 Build the binary like a standard Rust crate.
