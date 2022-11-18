@@ -3,7 +3,7 @@ mod cli;
 use anyhow::anyhow;
 use clap::{IntoApp, Parser};
 use cli::Opts;
-use jungle_fi_cli_utils::input_parsing::config::get_solana_cli_config;
+use jungle_fi_cli_utils::cli::get_solana_cli_config;
 use shadow_drive_cli::genesysgo_auth::{
     parse_account_id_from_url, GenesysGoAuth, GENESYSGO_AUTH_KEYWORD,
 };

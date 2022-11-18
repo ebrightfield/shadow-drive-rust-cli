@@ -2,7 +2,7 @@ pub mod process;
 
 use byte_unit::Byte;
 use clap::Parser;
-use jungle_fi_cli_utils::input_parsing::parse_pubkey;
+use jungle_fi_cli_utils::clap::pubkey_arg;
 use shadow_drive_cli::parse_filesize;
 use shadow_drive_cli::FILE_UPLOAD_BATCH_SIZE;
 use solana_sdk::pubkey::Pubkey;
@@ -74,25 +74,25 @@ pub enum Command {
     /// can be made (see cancel-delete-storage-account subcommand).
     DeleteStorageAccount {
         /// The account to delete
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
     },
     /// Cancels the deletion of a storage account enqueued for deletion.
     CancelDeleteStorageAccount {
         /// The account for which to cancel deletion.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
     },
     /// Redeem tokens afforded to a storage account after reducing storage capacity.
     ClaimStake {
         /// The account whose stake to claim.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
     },
     /// Increase the capacity of a storage account.
     AddStorage {
         /// Storage account to modify
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// File size string, accepts KB, MB, GB, e.g. "10MB"
         #[clap(parse(try_from_str = parse_filesize))]
@@ -101,7 +101,7 @@ pub enum Command {
     /// Increase the immutable storage capacity of a storage account.
     AddImmutableStorage {
         /// Storage account to modify
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// File size string, accepts KB, MB, GB, e.g. "10MB"
         #[clap(parse(try_from_str = parse_filesize))]
@@ -110,7 +110,7 @@ pub enum Command {
     /// Reduce the capacity of a storage account.
     ReduceStorage {
         /// Storage account to modify
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// File size string, accepts KB, MB, GB, e.g. "10MB"
         #[clap(parse(try_from_str = parse_filesize))]
@@ -119,32 +119,32 @@ pub enum Command {
     /// Make a storage account immutable. This is irreversible.
     MakeStorageImmutable {
         /// Storage account to be marked immutable
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
     },
     /// Fetch the metadata pertaining to a storage account.
     GetStorageAccount {
         /// Account whose metadata will be fetched.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
     },
     /// Fetch a list of storage accounts owned by a particular pubkey.
     /// If no owner is provided, the configured signer is used.
     GetStorageAccounts {
         /// Searches for storage accounts owned by this owner.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         owner: Option<Pubkey>,
     },
     /// List all the files in a storage account.
     ListFiles {
         /// Storage account whose files to list.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
     },
     /// Get a file, assume it's text, and print it.
     GetText {
         /// Storage account where the file is located.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// Name of the file to fetch
         file: String,
@@ -152,7 +152,7 @@ pub enum Command {
     /// Get basic file object data from a storage account file.
     GetObjectData {
         /// Storage account where the file is located.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// Name of the file to examine.
         file: String,
@@ -160,7 +160,7 @@ pub enum Command {
     /// Delete a file from a storage account.
     DeleteFile {
         /// Storage account where the file to delete is located.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// Name of the file to delete.
         file: String,
@@ -168,7 +168,7 @@ pub enum Command {
     /// Has to be the same name as a previously uploaded file
     EditFile {
         /// Storage account where the file to edit is located.
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// Path to the new version of the file. Must be the same
         /// name as the file you are editing.
@@ -181,7 +181,7 @@ pub enum Command {
         #[clap(long, default_value_t=FILE_UPLOAD_BATCH_SIZE)]
         batch_size: usize,
         /// The storage account on which to upload the files
-        #[clap(parse(try_from_str = parse_pubkey))]
+        #[clap(parse(try_from_str = pubkey_arg))]
         storage_account: Pubkey,
         /// A list of one or more filepaths, each of which is to be uploaded.
         #[clap(min_values = 1)]
