@@ -2,8 +2,7 @@ pub mod process;
 
 use byte_unit::Byte;
 use clap::Parser;
-use jungle_fi_cli_utils::clap::pubkey_arg;
-use shadow_drive_cli::parse_filesize;
+use shadow_drive_cli::{parse_filesize, pubkey_arg};
 use shadow_drive_cli::FILE_UPLOAD_BATCH_SIZE;
 use solana_sdk::pubkey::Pubkey;
 

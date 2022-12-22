@@ -17,6 +17,13 @@ pub const GENESYSGO_DRIVE: &str = "https://shdw-drive.genesysgo.net";
 /// Maximum amount of files to batch into a single [store_files] request.
 pub const FILE_UPLOAD_BATCH_SIZE: usize = 5;
 
+/// Clap value parser for base58 string representations of [Pubkey].
+pub fn pubkey_arg(pubkey: &str) -> anyhow::Result<Pubkey> {
+    Pubkey::from_str(pubkey).map_err(
+        |e| anyhow!("invalid pubkey: {}", e.to_string())
+    )
+}
+
 /// To get around using a [Box<dyn Signer>] with [ShadowDriveClient].
 pub struct WrappedSigner(Box<dyn Signer>);
 
@@ -130,6 +137,7 @@ pub fn last_modified(headers: &HeaderMap) -> anyhow::Result<String> {
         .to_string())
 }
 
+/// Convert a file size string to [Byte] object with the denoted size.
 pub fn parse_filesize(size: &str) -> anyhow::Result<Byte> {
     Byte::from_str(size).map_err(|e| {
         anyhow!(
