@@ -10,10 +10,10 @@ shadow-drive-rust = "0.4.0"
 tokio = {version = "^1", features = ["full"]}
 anyhow = "1.0.65"
 byte-unit = "4.0.14"
-solana-sdk = "1.10.34"
-solana-client = "1.10.34"
-solana-remote-wallet = "1.10.34"
-solana-version = "1.10.34"
+solana-sdk = "1.14.11"
+solana-client = "1.14.11"
+solana-remote-wallet = "1.14.11"
+solana-version = "1.14.11"
 reqwest = "0.11.12"
 log = "0.4.17"
 async-trait = "0.1.58"
@@ -22,5 +22,6 @@ uriparse = "0.6.4"
 serde = "1.0.145"
 serde_json = "1.0.86"
 clap = { version = "3.1.18", features = [ "derive" ] }
-solana-clap-v3-utils = { git = "https://github.com/Jungle-Finance/jungle-fi-cli-utils.git" }
+solana-clap-v3-utils = "1.14.11"
+#solana-clap-v3-utils = { git = "https://github.com/Jungle-Finance/jungle-fi-cli-utils.git" }
 jungle-fi-cli-utils = { git = "https://github.com/Jungle-Finance/jungle-fi-cli-utils.git" }

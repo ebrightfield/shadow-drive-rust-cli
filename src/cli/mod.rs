@@ -1,11 +1,18 @@
 pub mod process;
 
+use std::str::FromStr;
+use anyhow::anyhow;
 use byte_unit::Byte;
 use clap::Parser;
-use jungle_fi_cli_utils::clap::pubkey_arg;
 use shadow_drive_cli::parse_filesize;
 use shadow_drive_cli::FILE_UPLOAD_BATCH_SIZE;
 use solana_sdk::pubkey::Pubkey;
+
+pub fn pubkey_arg(pubkey: &str) -> anyhow::Result<Pubkey> {
+    Pubkey::from_str(pubkey).map_err(
+        |e| anyhow!("invalid pubkey: {}", e.to_string())
+    )
+}
 
 /// Manually specify a cluster url and/or keypair.
 /// Those values otherwise default to the Solana CLI config file.
